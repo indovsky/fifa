@@ -3,7 +3,7 @@ import ListItem from './ListItem';
 function TeamsList(props) {
 
     const getTeams = () => {
-        return props.teams.map((team, i) => <ListItem key={i} name={team} /> );
+        return props.teams.map((team, i) => <ListItem key={i} name={team} onListItemRemove={props.onListItemRemove} /> );
     }
 
     const teamsCount = () => {

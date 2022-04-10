@@ -26,7 +26,7 @@ function AddPlayer(props) {
                             <input type="text" className="form-control w-100" id="player" name="player" required />
                         </div>
                         <div className="col-12 col-sm-auto">
-                            <button type="submit" className="btn btn-primary w-100">
+                            <button type="submit" className="btn btn-primary w-100" autoComplete="off">
                                 Dodaj
                             </button>
                         </div>

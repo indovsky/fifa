@@ -8,7 +8,7 @@ function DrawnResult(props) {
             { props.result.map(player => {
                 return (
                     <div key={player.team} className="border-bottom py-3">
-                        <h5 className="m-0">{player.name} <span class="badge bg-secondary">{player.team}</span></h5>
+                        <h5 className="m-0">{player.name} <span className="badge bg-secondary">{player.team}</span></h5>
                     </div>
                 )
             }) }

@@ -4,6 +4,7 @@ import PlayersList from './PlayersList';
 import AddTeam from './AddTeam';
 import TeamsList from './TeamsList';
 import DrawResult from './DrawResult';
+import Header from './Header';
 import './App.css';
 
 class App extends Component {
@@ -12,7 +13,7 @@ class App extends Component {
     players: [],
     teams: [],
     result: [],
-    step: 1,
+    step: 0,
   }
 
   addPlayer = player => {
@@ -27,6 +28,17 @@ class App extends Component {
     this.setState(state => {
       return {
         teams: state.teams.concat(team)
+      }
+    })
+  }
+
+  removeListItem = (item, type) => {
+    this.setState(state => {
+      let arr = [...state[type]];
+      arr.splice(item, 1);
+
+      return {
+        [type]: arr
       }
     })
   }
@@ -55,10 +67,15 @@ class App extends Component {
   }
 
   canGoToNextStep = () => {
-    if(this.state.step === 1 && this.state.players.length >= 2) {
+    const {step, players, teams} = this.state;
+
+    if(step === 0) {
       return true;
     }
-    if(this.state.step === 2 && this.state.teams.length >= 2) {
+    if(step === 1 && players.length >= 2) {
+      return true;
+    }
+    if(step === 2 && teams.length === players.length) {
       return true;
     }
 
@@ -66,6 +83,8 @@ class App extends Component {
   }
 
   nextStep = () => {
+    if(!this.canGoToNextStep()) return;
+
     if(this.state.step === 2) {
       this.draw();
     }
@@ -92,24 +111,30 @@ class App extends Component {
       players: [],
       teams: [],
       result: [],
-      step: 1,
+      step: 0,
     });
   }
 
   showActiveTab = step => {
     switch(step) {
+      case 0:
+        return (
+          <>
+          <button className="btn btn-lg btn-primary" onClick={this.nextStep}>Rozpocznij</button>
+          </>
+        )
       case 1:
         return (
           <>
           <AddPlayer onPlayerAdd={this.addPlayer} />
-          <PlayersList players={this.state.players}/>
+          <PlayersList players={this.state.players} onListItemRemove={player => this.removeListItem(player, 'players')} />
           </>
         );
       case 2:
         return (
           <>
           <AddTeam onTeamAdd={this.addTeam} playersCount={this.state.players.length} teamsCount={this.state.teams.length} />
-          <TeamsList teams={this.state.teams}/>
+          <TeamsList teams={this.state.teams} onListItemRemove={team => this.removeListItem(team, 'teams')} />
           </>
         );
       case 3:
@@ -130,22 +155,30 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container">
+      <>
+      { this.state.step === 0 && <Header /> }
+      <div className="container my-5">
         <div className="row">
           <div className="col-12">
             { this.showActiveTab(this.state.step) }
 
-            <div className="d-flex justify-content-center gap-4">
+            {
+            this.state.step !== 0 &&
+             <div className="d-flex justify-content-center gap-4 my-5">
               { (this.state.step > 1 && this.state.step !== 3) && <button className="btn btn-secondary" onClick={this.prevStep}>Cofnij</button> }
 
-              { this.canGoToNextStep() && <button className="btn btn-success" onClick={this.nextStep}>
-                {this.state.step === 2 ? 'Losuj' : 'Dalej'}</button> }
+              {this.state.step !== 3 && <button className="btn btn-success" onClick={this.nextStep} disabled={!this.canGoToNextStep()}>
+                {this.state.step === 2 ? 'Losuj' : 'Dalej'}
+              </button> }
 
               { this.state.step === 3 && <button className="btn btn-danger" onClick={this.reset}>Zakończ</button> }
             </div>
+            }
+
           </div>
         </div>
       </div>
+      </>
     );
   }
 }
