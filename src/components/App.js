@@ -75,7 +75,7 @@ class App extends Component {
     if(step === 1 && players.length >= 2) {
       return true;
     }
-    if(step === 2 && teams.length === players.length) {
+    if(step === 2 && teams.length >= players.length) {
       return true;
     }
 

@@ -1,30 +1,23 @@
 function AddTeam(props) {
 
-    
-    const canAdd = () => {
-        return props.teamsCount < props.playersCount;
-    }
-
     const handleSubmit = e => {
         e.preventDefault();
         let teamName = e.target.team.value;
         
-        if(!teamName.trim().length || !canAdd()) return;
+        if(!teamName.trim().length) return;
 
         props.onTeamAdd(teamName.charAt(0).toUpperCase() + teamName.slice(1));
         e.target.team.value = ''; // Clear input value
     }
     
     const submitButton = () => {
-        if(canAdd()) {
-            return (
-                <div className="col-12 col-sm-auto">
-                    <button type="submit" className="btn btn-primary w-100">
-                        Dodaj
-                    </button>
-                </div>
-            );
-        }
+        return (
+            <div className="col-12 col-sm-auto">
+                <button type="submit" className="btn btn-primary w-100">
+                    Dodaj
+                </button>
+            </div>
+        );
     }
 
     return ( 
